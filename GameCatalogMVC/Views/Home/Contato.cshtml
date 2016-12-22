@@ -1,0 +1,117 @@
+﻿@model GameCatalogMVC.Models.Email
+           
+@{ 
+    ViewBag.Title = "Contato_Enviar";    
+}
+
+@section Styles
+{
+    <style type="text/css">
+        #divcontato {
+            font-family: Verdana;
+            font-size:small;
+            background-color: White;
+            height: 450px;
+        }
+        #txtNomeRemetente, #txtEmailRemetente
+        {
+            width: 350px;
+        }
+        #txtMensagem
+        {
+            width: 400px;
+            height: 100px;
+        }
+        #divRecaptcha
+        {
+            margin-left:50px;
+        }
+        #btnEnviar
+        {
+            margin-left:150px;
+        }   
+        .modal {
+          text-align: center;
+          padding: 0!important;
+          vertical-align: middle;
+        }
+    </style>    
+}
+
+@section Scripts
+{
+    <script>
+          $(document).ready(function(){                            
+              $('#divModal').modal()
+          });
+    </script>
+}
+
+
+<div id="divcontato" class="container-fluid col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+    <div>
+        <br />
+        <strong>Entre em contato com a Game Catalog MVC</strong>
+        <br />
+        <br />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(false, "Atenção:");
+            <table>
+                <tr>
+                    <td>Nome:</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.NomeRemetente, new { id = "txtNomeRemetente", maxlength = 50 })
+                        @Html.ValidationMessageFor(m => m.NomeRemetente, "*")
+                    </td>
+                </tr>
+                <tr>
+                    <td>E-mail:</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.EmailRemetente, new { id = "txtEmailRemetente", maxlength = 50 })
+                        @Html.ValidationMessageFor(m => m.EmailRemetente, "*")
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">Mensagem:</td>
+                    <td>
+                        @Html.TextAreaFor(m => m.Mensagem, new { id = "txtMensagem", maxlength = 4000 })
+                        @Html.ValidationMessageFor(m => m.Mensagem, "*")
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div id="divRecaptcha">
+                @ReCaptcha.GetHtml(language: "pt-br", theme: "white")
+            </div>
+            <br />
+            <button id="btnEnviar" class="btn-info btn-lg" alt="Enviar" title="Enviar e-mail"><span class="glyphicon glyphicon-envelope">&nbsp;Enviar</span></button>            
+        }                    
+        @if (@ViewBag.Enviado == 1)
+        {
+            <div id="divModal" class="modal fade" tabindex="-1">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Sucesso</h4>
+                        </div>
+                        <div class="modal-body">                            
+                            <h2>Email enviado!</h2>
+                            <span>Obrigado por entrar em contato com a Game Catalog MVC</span>
+                            <br />
+                            <span>Sua mensagem será respondida em breve.</span>
+                        </div>
+                        <div class="modal-footer">                            
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }        
+        <br />
+        <br />
+        <hr />  
+    </div>    
+</div>

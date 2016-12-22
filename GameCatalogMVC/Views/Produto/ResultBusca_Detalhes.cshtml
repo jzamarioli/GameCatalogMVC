@@ -1,0 +1,94 @@
+﻿@using GameCatalogMVC.Models;
+
+@{    
+    Layout = null;
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">
+    <style type="text/css">   
+        a span
+        {   
+            font-family:Verdana;    
+            font-size:small;        
+            color:#4b4848;             
+        }         
+        .colunaProdutosEncontrados
+        {   
+            border-top: 1px solid #CFCFCF;        
+            padding-top: 10px;                
+            padding-left:20px;
+            padding-right:10px;
+            padding-bottom:10px;    
+            height:240px;                     
+        }        
+        .colunaSelecionada
+        {
+            border: 1px solid #CFCFCF;            
+        }
+        #imgthumbnailprodutosencontrados
+        {
+            width:134px;
+            height:168px;
+            border-style: none;
+        }    
+    </style>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.colunaProdutosEncontrados').hover(function () {
+                $(this).addClass('colunaSelecionada');
+            },
+            function () {
+                $(this).removeClass('colunaSelecionada');
+            });
+            
+        });
+     </script>        
+</head>
+
+<body>          
+    <input type="hidden" id="numeroProdutosEncontradosAux" value="@ViewBag.NProdutos" />    
+    <input type="hidden" id="hdnCategoriaAux" value="@ViewBag.Categoria" />     
+    <script type="text/javascript">
+        document.getElementById("numeroProdutosEncontrados").innerHTML = document.getElementById("numeroProdutosEncontradosAux").value;
+        document.getElementById("hdnCategoria").value = document.getElementById("hdnCategoriaAux").value;
+    </script>
+    
+    @{  
+            <div id="divDataListBuscaDetalhes">
+                @foreach (Produto p in Model)
+                {
+                    if (ViewBag.EhPesquisa == true)      // se for feita a pesquisa, aumenta a quantidade de produtos (divs)
+                    {
+                        @Html.Raw("<div class='colunaProdutosEncontrados col-lg-2 col-md-3 col-sm-4 col-xs-12'>")
+                    }
+                    else
+                    {
+                        @Html.Raw("<div class='colunaProdutosEncontrados col-lg-3 col-md-3 col-sm-4 col-xs-12'>")
+                    }
+
+                    @* link sem ajax : *@
+                    @* O link com ajax não foi feito porque o helper @Ajax.ActionLink não permite colocar imagens no link, só texto: *@
+                    <a href='@Url.Action("Details", "Produto", new { idproduto = @p.IdProduto })'>
+                        <img id='imgthumbnailprodutosencontrados' src='@Url.Content("~/Content/fotos/" + @p.Foto)' alt='' />
+                        <br />
+                        <span>@p.Descricao </span><br />
+                        @if (!string.IsNullOrEmpty(p.Console.Descricao))
+                        {
+                            <span>@p.Console.Descricao </span>
+                            <br />
+                        }
+                    </a>
+
+                    @Html.Raw("</div>");
+                }
+            </div>
+    }
+
+</body>
+</html>
+
+
+

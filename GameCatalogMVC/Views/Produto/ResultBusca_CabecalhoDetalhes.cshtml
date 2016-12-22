@@ -1,0 +1,201 @@
+﻿@{    
+    Layout = null;
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">    
+    
+    <style type="text/css"> 
+        #divResultadoBusca
+        {               
+            background-color: White;
+            color:#565656;                                
+        }           
+        #divResultadoBusca a, #divResultadoBusca a:hover
+        {        
+            color: Black;
+            text-decoration:none;        
+        }
+        .Transparente
+        {
+            opacity:0.10;
+	        -moz-opacity: 0.10;
+	        filter: alpha(opacity=10);
+        }                       
+    </style>       
+
+    <script type="text/javascript">
+
+        $(document).ajaxStart(function () { 
+            $('#divProdutosEncontrados').addClass('Transparente');
+            $('#imgloader').css('display', 'block');
+
+        });
+        $(document).ajaxStop(function () { 
+            $('#divProdutosEncontrados').removeClass('Transparente');
+            $('#imgloader').css('display', 'none');
+        });
+
+            
+        function BuscabyTipoConsoleDescricaoCategoriaOrdem() {
+            
+            var tipo = document.getElementById("hdnTipo").value;
+            var console = document.getElementById("hdnConsole").value;
+            var descricao = document.getElementById("hdnDescricao").value;
+            var categoria = document.getElementById("hdnCategoria").value;
+            var textoOrdem = document.getElementById("ddlOrdem").selectedIndex;            
+            
+            if (textoOrdem != null)
+            {
+                var link = '@Url.Action("BuscabyTipoConsoleDescricaoCategoriaOrdem", "Produto", new { tipo = "VV", console = "WW", descricao = "XX", categoria = "YY", ordem = "ZZ" })';
+                var linkCategorias = '@Url.Action("ListaCategorias", "Categoria", new { tipo = "VV", console = "WW", ordem = "ZZ" })';
+                if (tipo != null && tipo!= "0")
+                {
+                    link = link.replace("VV", tipo);
+                    linkCategorias = linkCategorias.replace("VV", tipo);
+                }
+                else
+                {
+                    link = link.replace("VV", "0");
+                    linkCategorias = link.replace("VV", "0");
+                }
+
+                if (console != null && console != "0") {
+                    link = link.replace("WW", console);
+                    linkCategorias = linkCategorias.replace("WW", console);
+                }
+                else
+                {
+                    link = link.replace("WW", "0");
+                    linkCategorias = link.replace("WW", "0");
+                }
+
+                if (descricao != null && descricao != "0") {
+                    link = link.replace("XX", descricao);
+                }
+                else
+                {
+                    link = link.replace("XX", "0");
+                }
+
+                if (categoria != null && categoria != "0") {
+                    link = link.replace("YY", categoria);                    
+                }
+                else
+                {
+                    link = link.replace("YY", "0");
+                }
+
+                link = link.replace("ZZ", textoOrdem);
+                linkCategorias = linkCategorias.replace("ZZ", textoOrdem);
+            }
+
+            $.ajax({
+                url: link,
+                type: 'get',
+                beforeSend: function () {
+                    $('#divProdutosEncontrados').addClass('Transparente');
+                    $('#imgloader').css('display', 'block');                    
+                },
+                complete: function () {
+                    $('#divProdutosEncontrados').removeClass('Transparente');
+                    $('#imgloader').css('display', 'none');                    
+                },
+                success: function (data) {
+                    $('#divProdutosEncontrados').html(data);
+                },
+                error: function () {
+                    $('#divProdutosEncontrados').empty();
+                }
+            });
+            
+            if(descricao == "0") 
+            {                
+                $.ajax({
+                    url: linkCategorias,
+                    type: 'get',
+                    beforeSend: function () { },
+                    complete: function () {},
+                    success: function (data) {
+                        $('#divFiltroCategorias').html(data);
+                    },
+                    error: function () {
+                        $('#divFiltroCategorias').empty();
+                    }
+                });
+            }
+        }    
+    </script>     
+</head>
+
+<body>
+    <div id="divResultadoBusca" class="container-fluid" style="padding-top:3%">        
+            <br />
+            <div id="divCabecalhoBusca" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-bottom:2%">
+                @{
+                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                        @if (@ViewBag.Mensagem != null)
+                        {
+                            <span style="font-size:large; color: #F37B20;">@ViewBag.Mensagem</span>
+                        }
+                        else
+                        {
+                            <span style="font-size:large ;color: #F37B20;">Resultado da busca por: <span style="color: #0082D6">@ViewBag.Descricao</span></span>
+                        }
+                        <br />
+                        <span style="font-size:medium;">Produtos encontrados:&nbsp;<span id="numeroProdutosEncontrados" style="color: #0082D6;">@ViewBag.NProdutos</span></span>
+                    </div>
+
+                    <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                        <label for="ddlOrdem">Ordenar por:</label>
+                        <select id="ddlOrdem" onchange="javascript: BuscabyTipoConsoleDescricaoCategoriaOrdem()">
+                            <option value="NameASC">A - Z</option>
+                            <option value="NameDESC">Z - A</option>
+                            <option selected="selected" value="DataLancamentoDESC">Data de lançamento</option>
+                        </select>
+                    </div>
+                }
+                
+            </div>
+            @*na primeira chamada, guarda em um campo hidden o tipo de produto (1-console, 2-game, 3-acessório)*@
+            <input type="hidden" id="hdnTipo" value="@ViewBag.Tipo" />
+            @*na primeira chamada, guarda em um campo hidden o console (1-Playstation 3, 2-Playstation 2, 3-PSP, 4-xbox 360, 5-PC, 6-DS, 7-Wii)*@
+            <input type="hidden" id="hdnConsole" value="@ViewBag.Console" />
+            @*na primeira chamada, guarda em um campo hidden a descricao *@
+            <input type="hidden" id="hdnDescricao" value="@ViewBag.Descricao" />
+            @*na primeira chamada, guarda em um campo hidden a categoria *@
+            <input type="hidden" id="hdnCategoria" value="@ViewBag.Categoria" />
+
+            @if (@ViewBag.NProdutos != 0)
+            {
+                
+                    <br />
+                    <div>
+                        @if (ViewBag.Tipo == 2)      // se for tipo game mostra o filtro de categorias à esquerda
+                        {
+                            @Html.Raw("<div id='divFiltroCategorias' class='col-lg-2 col-md-2 col-sm-3 col-xs-4'>")
+                            @Html.Action("ListaCategorias", "Categoria", new { tipo = @ViewBag.Tipo, console = @ViewBag.Console, ordem = "2" })
+                            @Html.Raw("</div> ")
+                            // div container dos produtos (divs) à direita:
+                            @Html.Raw("<div class='col-lg-10 col-md-10 col-sm-9 col-xs-8'>")
+                        }
+                        else
+                        {
+                            @Html.Raw("<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>")
+                        }
+                        <img alt='' id='imgloader' src='~/Content/images/loader.gif' style='display: none; position:absolute; top: 250px; left: 350px;' />
+                        @Html.Raw("<div id='divProdutosEncontrados'")
+                        @Html.Partial("ResultBusca_Detalhes")
+                        @Html.Raw("</div>")
+                        @Html.Raw("</div>")
+
+                    </div>
+            }
+            else
+            {
+                <br />
+            }        
+    </div>
+</body>
+</html>

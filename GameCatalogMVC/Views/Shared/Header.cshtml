@@ -1,0 +1,114 @@
+﻿@{    
+    Layout = null;          //instrução para não herdar da página de layout
+}
+
+<!DOCTYPE HTML>
+
+<html lang="pt-br">
+<head>
+     
+    <style type="text/css">                
+        #divCabecalho
+        {             
+             background-color: White;                      
+             margin: 0 auto 0;               
+             height: 80px;               
+        }          
+        #divLogo
+        {           
+            
+            background-color:inherit;                            
+        }
+        #divTelefone
+        {
+            padding-top:1%;               
+        }
+        #divBuscaProduto
+        {   
+            background-color:inherit;   
+            padding-top:1%;                     
+        }    
+        #divFanPageFacebook
+        {            
+            padding-top:2%;
+            direction:rtl;
+        }        
+         .btnSearch
+         {
+            cursor: pointer;
+         }                   
+    </style>   
+    
+    <script type="text/javascript">
+        function SubmitForm() {
+            var textobusca = document.getElementById("txtSearch").value;
+            var link = '@Url.Action("BuscabyDescricao", "Produto", new {Descricao= "Z"})';
+            link = link.replace("Z", textobusca);
+            window.location.href = link;
+        }
+
+            //JQUERY UI Autocomplete            
+            // Lendo dados de um controller
+            // esta chamada retorna as descrições dos jogos no banco de dados
+            // para retornar via Jquery/Ajax os dados retornados por um controller, seguir estas exigências:
+            // a chamada deve ser do tipo "POST"
+            // o datatype deve ser "json" e o contentype deve ser "application/json; charset=utf-8"         
+            // o controller deve ser do tipo JsonResult e deve retornar Json                           
+            var link = '@Url.Action("RetornaNomeProdutos", "Produto")';            
+            $.ajax({
+                url: link,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: "{}",
+                success: function (data) {                    
+                    if (data.hasOwnProperty("d"))
+                    // Leave the .d behind and pass the rest of the JSON object forward.
+                        FillAutoComplete(data.d);
+                    else
+                    // No .d; no transformation necessary.
+                        FillAutoComplete(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+            function FillAutoComplete(data) {                
+                var dataParsed = eval(data);
+
+                $('#txtSearch').autocomplete({
+                    source: dataParsed,
+                    minLength: 3
+                });
+            };           
+        
+    </script>  
+</head>
+
+<body>  
+    <div style="height:60px;">        
+            <form id="form1" class="form-inline" onsubmit="javascript:SubmitForm(); return false;">
+                <div id="divCabecalho" class="container-fluid">
+                    <div id="divLogo" class="col-lg-3 col-md-2 col-sm-2 col-xs-0">
+                        <a href='@Href("~/Home/Index")'><img src='@Url.Content("~/Content/images/controle.png")' alt="logo gamecatalogmvc" /></a>
+                    </div>
+                    <div id="divTelefone" class="col-lg-3 col-md-3 col-sm-4 col-xs-0">
+                        <span class="text-info">Nosso telefone de contato</span>
+                        <br />
+                        <img src='@Url.Content("~/Content/images/fone.png")' alt="logo fone" class="fone" />
+                    </div>
+                    <div id="divBuscaProduto" class="col-lg-5 col-md-6 col-sm-6 col-xs-9 form-group-lg">
+                        <input type="text" id="txtSearch" class="form-control"/>                        
+                        <button id="btnSearch" class="btn-lg btn-primary" alt="Busca" onclick="SubmitForm()"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+
+                    <div id="divFanPageFacebook" class="col-lg-1 col-md-1 col-sm-0 col-xs-3">
+                        <a id="lnkFacebook" class="facebook" title="Fan Page no Facebook" target="_blank" href="http://facebook.com/Nintendo">
+                            <img src='@Url.Content("~/Content/images/facebook.png")' alt="página no facebook" />
+                        </a>
+                    </div>
+                </div>
+            </form>        
+    </div> 
+</body>
+</html>

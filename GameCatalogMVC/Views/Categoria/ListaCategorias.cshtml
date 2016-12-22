@@ -1,0 +1,89 @@
+﻿@using GameCatalogMVC.Models;
+@model IEnumerable<Categoria>
+
+@{    
+    Layout = null;
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">    
+
+    @* este script referencia o unobstrusive Ajax, que possibilitaria que o helper @Ajax.ActionLink fosse usado nos menus: *@
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <style type="text/css">
+        #divCategoria
+        {
+            background-color:#D7F0F0;
+            color: #7AC6F0;
+        }
+        .TituloCategoria
+        {
+            color: Black;
+            font-weight: bold; 
+            margin-bottom: 25px;           
+            margin-left: 8px;  
+        }
+        #divLinkCategoriasBox
+        {
+            float: left;
+            height: 20px; /*Specify Height*/            
+            background-color: green; /*Add a background color to the box*/
+            text-align:center; /*Align the text to the center*/
+            width:13%;
+            margin-right: 3px;
+            margin-top: -6px;            
+        }
+        #divLinkCategorias
+        {
+            float: right;            
+            height: 30px; /*Specify Height*/            
+            margin-top: -10px;            
+            width:80%;
+        }  
+        #divCategoria ul
+        {
+            list-style: none;
+            margin:0;
+            padding:5px;
+        } 
+        #divCategoria ul li
+        {            
+            border-bottom: 1px solid #4FCEB5;
+            padding: 12px;
+         }     
+        #divCategoria ul li a:hover
+        {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>          
+    @{
+        var tipo = @ViewBag.Tipo;
+        var Console = @ViewBag.Console;
+        var Descricao = "0";        
+        var Ordem = @ViewBag.Ordem;
+        string divAtualizar;        
+        divAtualizar = "divProdutosEncontrados";
+    }
+    <div id="divCategoria">
+        <span class="TituloCategoria">Categoria</span>
+        <ul>              
+        @{          
+            foreach (Categoria c in Model)
+            {            
+                <li> 
+                    <div id="divLinkCategoriasBox"></div>
+                    <div id="divLinkCategorias">
+                        @Ajax.ActionLink(linkText: @c.Descricao , actionName: "BuscabyTipoConsoleDescricaoCategoriaOrdem", controllerName: "Produto", routeValues: new { tipo = tipo, console = Console, descricao = Descricao, categoria = @c.IdCategoria, ordem = Ordem }, ajaxOptions: new AjaxOptions { UpdateTargetId = divAtualizar})            
+                    </div>
+                </li>
+            }        
+        }
+        </ul>
+    </div>    
+</body>
+</html>

@@ -1,0 +1,135 @@
+﻿@{    
+    Layout = null;          //instrução para não herdar da página de layout
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">    
+    
+    <style type="text/css">                
+        #divrodape
+        {                                        
+             font-family: Verdana;              
+             background-color: #ebebeb;
+        } 
+        #divrodape2
+        {                 
+             border-top: 1px solid #C2C2C2;      
+             font-family: Verdana;         
+             color: #7d7d7d;
+             font-size: small;                                             
+             box-shadow:0px 3px 0px #C2C2C2; 
+             background-color: #ebebeb;             
+        } 
+        #divSobre
+        {   
+            border-right: 1px solid #C2C2C2;
+            height: 700px;               
+            margin-top:25px; 
+            padding-right:15px;                       
+        }
+        #divFacebook
+        {            
+            border-right: 1px solid #C2C2C2;
+            height: 700px;                  
+            margin-top:25px;                                               
+        }
+        #divTwitter
+        {
+            height: 700px;                                                    
+            margin-top:25px;                                          
+        }
+        .TituloRodape
+        {            
+            font-size: medium;            
+            color: #CE171F;
+            font-weight:bold;              
+        }
+        .TextoRodape
+        {            
+            font-size: small;
+            color: #7d7d7d;
+            margin-top: 30px;                         
+        } 
+    </style>  
+    <script type="text/javascript">
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/it_IT/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+        (document, 'script', 'facebook-jssdk'));
+    </script>  
+</head>
+
+<body>
+    <div class="container-fluid" style="margin-top:3%;">
+        <div id="divrodape" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="divSobre" class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="TituloRodape">
+                    Sobre<br />
+                </div>
+                <p class="TextoRodape">
+                    Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit. Morbi non sapien augue.
+                    Cras tempus convallis varius. Duis id
+                    feugiat metus. Ut bibendum ipsum
+                    nibh, vitae eleifend dui vestibulum quis.
+                    Cras ultricies, nibh nec accumsan
+                    maximus, nunc nisi tristique ipsum, vel
+                    pulvinar lorem urna id metus. Etiam
+                    vitae auctor massa. Praesent et lobortis
+                    justo. Aenean eget leo quis dolor mollis
+                    tempor. Proin mattis a justo in porttitor.
+                    Duis elementum egestas dui ut
+                    pharetra. Donec consequat neque eget
+                    malesuada finibus. Curabitur dolor leo,
+                    vehicula at blandit eu, dapibus non
+                    massa.
+                    <br />
+                    <br />
+                    <strong>Nosso endereço</strong>:
+                    <br />
+                    Piazza del Colosseo, 1<br />
+                    CEP: 00184
+                    <br />
+                    Roma - Italia
+                    <br />
+                    Fone: (11) 2980-43XX
+                </p>
+            </div>
+
+            <div id="divFacebook" class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                <div class="TituloRodape">
+                    Facebook
+                    <br />
+                    <br />
+                </div>
+
+                <div class="fb-like-box" data-href="https://www.facebook.com/Nintendo/" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="true" data-show-border="true"></div>
+
+            </div>
+
+            <div id="divTwitter" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="TituloRodape">
+                    Twitter<br />
+                </div>
+                <div class="TextoRodape">                    
+                    <a href="https://twitter.com/NintendoAmerica" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @@NintendoAmerica</a>
+                    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+                </div>
+            </div>
+        </div>
+    
+        <div id="divrodape2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <br />
+            <span style="margin-top:20px; font-weight:bold">Copyright &copy2016 Games Catalog MVC</span>
+            <br />
+            <br />
+            <br />
+        </div>
+    </div>
+</body>
+</html>

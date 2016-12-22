@@ -1,0 +1,75 @@
+﻿@using GameCatalogMVC.Models;
+@model IEnumerable<Produto>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">
+    <style type="text/css">    
+        #divDataList
+        {            
+            margin: 0 auto;        
+            font-family:Verdana;    
+            font-size:small;        
+            color:#4b4848; 
+            padding-top: 30px;
+            /*margin-left:9%;*/               
+        }     
+        .colunaProdutosEncontrados
+        {     
+            border-top: 1px solid #CFCFCF;        
+            padding-top: 5px;                                        
+            height:240px;
+        }
+        #imgthumbnail
+        {
+            /*width:168px;
+            height:210px;*/                        
+            width:134px;
+            height:168px;
+        } 
+        .colunaSelecionada
+        {
+            border: 1px solid #CFCFCF;            
+        }
+        
+    </style>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.colunaProdutosEncontrados').hover(function () {
+                $(this).addClass('colunaSelecionada');
+            },
+            function () {
+                $(this).removeClass('colunaSelecionada');
+            });
+        });
+     </script>
+</head>
+
+<body>       
+    <div class="container-fluid">
+        <div id="divDataList" class="container-fluid col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            @{                
+                foreach (Produto p in Model)
+                {                   
+                    <div class='colunaProdutosEncontrados col-lg-2 col-md-3 col-sm-4 col-xs-12'>
+                        <a href='@Url.Action("Details", "Produto", new {idproduto = @p.IdProduto })'>
+                            <img id='imgthumbnail' src='@Url.Content("~/Content/fotos/" + @p.Foto)' alt='' />
+                        </a>
+                        <br />
+                        @p.Descricao <br />
+                        @if (!string.IsNullOrEmpty(p.Console.Descricao ))
+                        {
+                            @p.Console.Descricao <br />
+                        }
+                    </div>                  
+                }                
+            }                        
+        </div>
+    </div>
+</body>
+</html>

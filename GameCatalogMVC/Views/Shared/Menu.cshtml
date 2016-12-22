@@ -1,0 +1,146 @@
+@{    
+    Layout = null;          //instrução para não herdar da página de layout
+}
+
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head title="">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <style type="text/css">        
+        body 
+        {    
+            background-color: #F5F5F5; 
+        }
+        #divMenu
+        {            
+            height: 39px;
+            background-color: #30943F;
+            margin: 0 auto; 
+            border-top: 1px solid #ccc;        
+            border-bottom: 1px solid #ccc;        
+        }
+        #divMenu ul
+        {
+            z-index:100;
+        }
+        #divMenu ul.menubar{
+          margin: 0px;
+          padding: 0px;
+          background-color: #FFFFFF; /* IE6 Bug */
+          font-size: medium;
+        } 
+        #divMenu ul.menubar .submenu{
+          margin: 0px;
+          padding: 0px;  
+          list-style: none;
+          background-color: #30943F;
+          /*border: 1px solid #ccc;*/       /* se o menu estiver sozinho, sem div de fundo, deixar esta linha*/
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+          float:left;  
+        } 
+        #divMenu ul.menubar ul.menu{
+          display: none;
+          position: absolute;
+          margin: 0px;
+        } 
+        #divMenu ul.menubar a{
+          padding: 5px;
+          display:block;
+          text-decoration: none;
+          color: White;                                     /* cor da letra dos itens não selecionados do menu  */
+          padding: 5px;
+        } 
+        #divMenu ul.menu, #divMenu ul.menu ul{
+          margin: 0;
+          padding: 0;
+          border-bottom: 1px solid #ccc;
+          width: 150px; /* Width of Menu Items */
+          background-color: #30943F; 
+          opacity:0.92;
+          -moz-opacity: 0.92;
+          filter: alpha(opacity=92);                     
+          /* IE6 Bug */                                             /* cor de fundo do submenu que abre */
+        } 
+        #divMenu ul.menu li{
+          position: relative;
+          list-style: none;
+          border: 0px;
+        } 
+        #divMenu ul.menu li a{
+          display: block;
+          text-decoration: none;
+          border: 1px solid #ccc;
+          border-bottom: 0px;
+          color: White;                             /* cor da letra dos itens não selecionados do submenu  */
+          padding: 5px 10px 5px 5px;
+        }
+        /* Fix IE. Hide from IE Mac \*/
+        * html #divMenu ul.menu li { float: left; height: 1%; }
+        * html #divMenu ul.menu li a { height: 1%; }
+        /* End */ 
+        #divMenu ul.menu ul{
+          position: absolute;
+          display: none;
+          left: 149px; /* Set 1px less than menu width */
+          top: 0px;
+        } 
+        #divMenu ul.menu li.submenu ul { display: none; } /* Hide sub-menus initially */ 
+        #divMenu ul.menu li.submenu { background: transparent url(arrow.gif) right center no-repeat; } 
+        #divMenu li.submenu a:hover { background-color: #444444; }  /* cor de fundo dos itens de menu selecionados que não tem submenu */    
+        #divMenu ul.menu li a:hover { background-color: #444444; }  /* cor de fundo dos itens selecionados do submenu */     
+    </style>
+
+    @* este script referencia o unobstrusive Ajax, que possibilitaria que o helper @Ajax.ActionLink fosse usado nos menus: *@
+    @*@Scripts.Render("~/bundles/jqueryval") *@
+    <script type="text/javascript">
+        function horizontal() {
+            var navItems = document.getElementById("menu_dropdown").getElementsByTagName("li");
+            for (var i = 0; i < navItems.length; i++) {
+                if (navItems[i].className == "submenu") {
+                    if (navItems[i].getElementsByTagName('ul')[0] != null) {
+                        navItems[i].onmouseover = function () {
+                            this.getElementsByTagName('ul')[0].style.display = "block";
+                            this.style.backgroundColor = "#444444";         // cor de fundo dos itens de menu selecionados que tem submenu
+
+                        }
+                        navItems[i].onmouseout = function () {
+                            this.getElementsByTagName('ul')[0].style.display = "none";
+                            this.style.backgroundColor = "#30943F";         // cor de fundo dos itens de menu selecionados que tem submenu
+                        }
+                    }
+                }
+            }
+        } 
+    </script> 
+</head>
+ 
+<body onload="horizontal();">    
+    <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div id="divMenu" style="margin-top: 20px; margin-bottom:1%;">
+            <ul id="menu_dropdown" class="menubar">
+                <li class="submenu"><a href='@Href("~/Home/Index")'>Home</a></li>
+                <li class="submenu">
+                    <a href="#">Xbox 360</a>
+                    <ul class="menu">
+                        @*Submenu sem chamada por Ajax:*@
+                        <li><a href='@Url.Action("BuscabyTipoConsole", "Produto", new { tipo = 2, console = 4, mensagem="Games para Xbox 360" })'>Games</a></li>
+                        <li><a href='@Url.Action("BuscabyTipoConsole", "Produto", new { tipo = 3, console = 4, mensagem = "Acessórios para Xbox 360" })'>Acessórios</a></li>
+                        <li><a href='@Url.Action("BuscabyTipoConsole", "Produto", new { tipo = 1, console = 4, mensagem = "Consoles Xbox 360" })'>Consoles</a></li>
+                        @*<li><a href='@Href("~/Produto/BuscabyTipoConsole/2/4")'>Jogos</a></li>
+                            <li><a href='@Href("~/Produto/BuscabyTipoConsole/3/4")'>Acessórios</a></li>
+                            <li><a href='@Href("~/Produto/BuscabyTipoConsole/1/4")'>Consoles</a></li>                        *@
+                        @*Submenu com chamada por Ajax:*@
+                        @*<li>@Ajax.ActionLink(linkText: "Jogos", actionName: "BuscabyTipoConsole", controllerName: "Produto", routeValues: new { tipo = 2, console = 4, mensagem="Jogos para Xbox 360" }, ajaxOptions: new AjaxOptions { UpdateTargetId = "divConteudo" })
+                            <li>@Ajax.ActionLink(linkText: "Acessórios", actionName: "BuscabyTipoConsole", controllerName: "Produto", routeValues: new { tipo = 3, console = 4, mensagem = "Acessórios para Xbox 360" }, ajaxOptions: new AjaxOptions { UpdateTargetId = "divConteudo" })
+                            <li>@Ajax.ActionLink(linkText: "Consoles", actionName: "BuscabyTipoConsole", controllerName: "Produto", routeValues: new { tipo = 1, console = 4, mensagem = "Consoles Xbox 360" }, ajaxOptions: new AjaxOptions { UpdateTargetId = "divConteudo" })*@
+                    </ul>
+                </li>
+                <li class="submenu"><a href='@Href("~/Home/Localizacao")'>Localização</a></li>
+                <li class="submenu"><a href='@Href("~/Home/Contato")'>Contato</a></li>
+            </ul>
+            <br />
+        </div>
+    </div>
+</body>
+</html>
